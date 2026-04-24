@@ -13,3 +13,5 @@ I easily converted the JSON object containing my data to a Python object, but th
 Still figuring this out, but the action will eventually repeat the retrieving/cleaning/CSV download process at 9:30 AM EST on the first Friday of every month. The Github Action should download the CSVs to this repository. This ensures the Streamlit Dashboard, which pulls CSV data directly from this repository, is updated monthly.
 
 *Creating a Streamlit Dashboard*
+
+Having no prior experience working with Streamlit, I found their documentation and working examples very helpful.
