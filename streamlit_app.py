@@ -12,7 +12,6 @@ st.logo(unoLogo,
     link="https://www.unomaha.edu/office-of-strategic-marketing-and-communications/_files/uno-o-icon-color.png",
     icon_image=unoLogo)
 
-#I wanted to configure a color theme with a TOML file, but I couldn't figure out how
 avgHourly = pd.read_csv("https://raw.githubusercontent.com/anicklous/econ8320-final-project/refs/heads/main/avgHourly.csv")
 exportIndex = pd.read_csv("https://raw.githubusercontent.com/anicklous/econ8320-final-project/refs/heads/main/exportIndex.csv")
 importIndex = pd.read_csv("https://raw.githubusercontent.com/anicklous/econ8320-final-project/refs/heads/main/importIndex.csv")
