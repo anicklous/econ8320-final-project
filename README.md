@@ -10,8 +10,8 @@ I easily converted the JSON object containing my data to a Python object, but th
 
 *Creating a Github Action*
 
-Still figuring this out, but the action will eventually repeat the retrieving/cleaning/CSV download process at 9:30 AM EST on the first Friday of every month. The Github Action should download the CSVs to this repository. This ensures the Streamlit Dashboard, which pulls CSV data directly from this repository, is updated monthly.
+Still figuring this out, but the action will eventually repeat the retrieving/cleaning/CSV download process at 9:30 AM EST on the third Friday of every month. The Github Action should download the CSVs to this repository. This ensures the Streamlit Dashboard, which pulls CSV data directly from this repository, is updated monthly.
 
 *Creating a Streamlit Dashboard*
 
-Having no prior experience working with Streamlit, I found their documentation and working examples very helpful.
+Having no prior experience working with Streamlit, I found their documentation and working examples very helpful. These resources taught me how to implement changes to layouts, data elements, input widgets, and more. Before I could get too far designing my dashboard, though, I realized that my data still needed some cleaning. In the VS Code Codespace (where I designed the dashboard UI), I converted column types, removed special characters (-), and ordered my categorical columns to ensure coherent visualizations. While Streamlit offered basic visualization options, they didn't allow for much customization. For the most part, I ended up using Pandas DataFrame and Plotly Express objects as building blocks instead. Further, I wanted to change the color scheme from the default setting, but that would've required using an external TOML file. Once I was satisfied with my dashboard UI, I deployed the app through Streamlit Community Cloud.
