@@ -4,8 +4,13 @@ import numpy as np
 import plotly.express as px
 
 st.title(":blue[ECON 8320] Final Project")
-st.write("A display including most recent data from the Bureau of Labor Statistics")
+st.write("Updated monthly with the latest data from the Bureau of Labor Statistics")
 st.divider()
+st.write("Current Metrics and Month-to-Month Changes")
+unoLogo = "https://www.unomaha.edu/office-of-strategic-marketing-and-communications/_files/uno-o-icon-color.png"
+st.logo(unoLogo,
+    link="https://www.unomaha.edu/office-of-strategic-marketing-and-communications/_files/uno-o-icon-color.png",
+    icon_image=unoLogo)
 
 #I wanted to configure a color theme with a TOML file, but I couldn't figure out how
 avgHourly = pd.read_csv("https://raw.githubusercontent.com/anicklous/econ8320-final-project/refs/heads/main/avgHourly.csv")
@@ -44,6 +49,22 @@ importIndex['periodName'] = pd.Categorical(importIndex['periodName'], categories
 nonfarm['periodName'] = pd.Categorical(nonfarm['periodName'], categories=order, ordered=True)
 unempRate['periodName'] = pd.Categorical(unempRate['periodName'], categories=order, ordered=True)
 
+e, f, g= st.columns(3)
+h, i = st.columns(2)
+
+hourlyMain = pd.DataFrame(avgHourly.head(2))
+exportMain = pd.DataFrame(exportIndex.head(2))
+importMain = pd.DataFrame(importIndex.head(2))
+nonfarmMain = pd.DataFrame(nonfarm.head(2))
+unempMain = pd.DataFrame(unempRate.head(2))
+
+e.metric("Total Nonfarm Employment",nonfarmMain['value'][0], nonfarmMain['value'][0]-nonfarmMain['value'][1],border=True)
+f.metric("Average Hourly Earnings",hourlyMain['value'][0], hourlyMain['value'][0]-hourlyMain['value'][1],border=True)
+g.metric("Unemployment Rate", unempMain['value'][0], unempMain['value'][0]-unempMain['value'][1],border=True)
+
+h.metric("Import Price Index", importMain['value'][0], importMain['value'][0]-importMain['value'][1],border=True)
+i.metric("Export Price Index", exportMain['value'][0], exportMain['value'][0]-exportMain['value'][1],border=True)
+
 st.sidebar.write("Click to learn more:")
 
 if st.sidebar.button("Unemployment Rate"):
@@ -55,10 +76,10 @@ if st.sidebar.button("Unemployment Rate"):
 
         To calculate it, divide the number of unemployed individuals by the total labor force, then multiply the ratio by 100.
         """)
+    st.divider()
     st.caption("**Due to a lapse caused by the government shutdown, no data exists for October 2025*")
     st.caption("**Zoom in for more precision*")
-    st.divider()
-
+    
     st.write('**Unemployment Rates by Month and Year**')
     st.line_chart(unempRate,x= 'periodName',                  
                   y='value',
@@ -72,26 +93,40 @@ if st.sidebar.button("Total Nonfarm Employment"):
         """
         *Total Nonfarm Employment*
 
-        Total nonfarm employment counts the number of US workers in the economy, excluding proprietors, private household employees, unpaid volunteers, farm employees, and the unincorporated self-employed.
+        Total Nonfarm Employment counts the number of US workers in the economy, excluding proprietors, private household employees, unpaid volunteers, farm employees, and the unincorporated self-employed.
 
-        According to the Federal Reserve Bank, nonfarm workers account for approximately 80 percent of the workers who contribute to Gross Domestic Product.
+        According to the Federal Reserve Bank, nonfarm workers account for approximately 80% of the workers who contribute to Gross Domestic Product.
         """)
     st.divider()
+    st.caption("**In thousands of employees*")
 
-if st.sidebar.button("Average Hourly Wages"):
+    monthChange = pd.DataFrame(nonfarm.head(2))
+    yearChanges = pd.DataFrame(nonfarm[nonfarm['periodName']==nonfarm['periodName'][0]])
+
+    a, b = st.columns(2)
+    c, d = st.columns(2)
+
+    a.metric("Current Total Nonfarm Employment",monthChange['value'][0], border=True)
+    b.metric("Last Month",monthChange['value'][1], monthChange['value'][0]-monthChange['value'][1], border=True)
+
+    c.metric("Last Year", yearChanges['value'][12], yearChanges['value'][0]- yearChanges['value'][12], border=True)
+    d.metric("Two Years Ago", yearChanges['value'][24], yearChanges['value'][0]- yearChanges['value'][24], border=True)
+
+if st.sidebar.button("Average Hourly Earnings"):
     st.markdown(
         """
-        *Average Hourly Wages*
+        *Average Hourly Earnings*
 
-        Unemployment rate is one of many indicators of an economy's health.
+        Average Hourly Earnings is a measure of the average hourly earnings of all private employees on a “gross” basis, including overtime pay.
 
-        To calculate it, divide the number of unemployed individuals by the total labor force, then multiply the ratio by 100.
+        Average hourly earnings measure the actual return to a worker for a set period of time, rather than the amount contracted for a unit of work (the wage rate).
         """)
-    st.caption("**Private sector, seasonally adjusted*")
     st.divider()
-
-    st.write('**Ranges by Year: Average Hourly Wage (USD)**')
-    wageBox = px.box(avgHourly,y='value',color='year')
+    st.caption("**Private sector, seasonally adjusted*")
+    
+    st.write('**Average Hourly Earnings Spread by Year(USD)**')
+    wageBox = px.box(avgHourly,y='value',color='year',labels={'value': 'Average Hourly Earnings (USD)',
+                                                              'year': 'Year'})
     st.plotly_chart(wageBox)
     
 if st.sidebar.button("Import Price Index"):
@@ -99,26 +134,32 @@ if st.sidebar.button("Import Price Index"):
         """
         *Import Price Index*
 
-        The Import Price Index (IPI) measures the average change over time in the prices paid for non-military goods and services purchased from foreign suppliers and imported into the US.
+        The Import Price Index measures the average change over time in the prices paid for non-military goods and services purchased from foreign suppliers and imported into the US.
 
         """)
-    st.caption("**Base period: 2000 = 100*")
     st.divider()
+    st.caption("**Base period: 2000 = 100*")
 
-    st.dataframe(importIndex,hide_index=True,column_order=('year','periodName','value'))
+    importTable = pd.DataFrame(importIndex)
+    importTable = importTable[['year','periodName','value']]
+    importTable.rename(columns={'year': 'Year', 'periodName': 'Month', 'value': 'Index'}, inplace=True)
+    st.write(importTable)
 
 if st.sidebar.button("Export Price Index"):
     st.markdown(
         """
         *Export Price Index*
 
-        The Export Price Index (XPI) measures the average change over time in the prices of goods and services produced domestically and sold to other countries.
+        The Export Price Index measures the average change over time in the prices of goods and services produced domestically and sold to other countries.
 
         """)
-    st.caption("**Base period: 2000 = 100*")
     st.divider()
-
-    st.dataframe(exportIndex,hide_index=True,column_order=('year','periodName','value'))
+    st.caption("**Base period: 2000 = 100*")
+    
+    exportTable = pd.DataFrame(exportIndex)
+    exportTable = exportTable[['year','periodName','value']]
+    exportTable.rename(columns={'year': 'Year', 'periodName': 'Month', 'value': 'Index'}, inplace=True)
+    st.write(exportTable)
 
 st.sidebar.button("**Back to main**", type='tertiary')
 st.sidebar.divider()
@@ -126,5 +167,3 @@ st.sidebar.page_link("https://www.bls.gov/developers/api_signature_v2.htm",label
 st.sidebar.page_link("https://data.bls.gov/toppicks?survey=bls",label=":blue[Original data source]")
 st.sidebar.divider()
 st.sidebar.caption("Last updated: April 2026")
-
-st.dataframe(nonfarm,hide_index=True,column_order=('year','periodName','value'))
