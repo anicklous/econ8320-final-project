@@ -57,14 +57,55 @@ importMain = pd.DataFrame(importIndex.head(2))
 nonfarmMain = pd.DataFrame(nonfarm.head(2))
 unempMain = pd.DataFrame(unempRate.head(2))
 
-e.metric("Total Nonfarm Employment",nonfarmMain['value'][0], nonfarmMain['value'][0]-nonfarmMain['value'][1],border=True)
-f.metric("Average Hourly Earnings",hourlyMain['value'][0], hourlyMain['value'][0]-hourlyMain['value'][1],border=True)
-g.metric("Unemployment Rate", unempMain['value'][0], unempMain['value'][0]-unempMain['value'][1],border=True)
+e.metric("Total Nonfarm Employment",nonfarmMain['value'][0], nonfarmMain['value'][0]-nonfarmMain['value'][1],border=True,format='%,d')
+f.metric("Average Hourly Earnings",hourlyMain['value'][0], hourlyMain['value'][0]-hourlyMain['value'][1],border=True,format='dollar')
+g.metric("Unemployment Rate", unempMain['value'][0], unempMain['value'][0]-unempMain['value'][1],border=True,format='%.2f')
 
-h.metric("Import Price Index", importMain['value'][0], importMain['value'][0]-importMain['value'][1],border=True)
-i.metric("Export Price Index", exportMain['value'][0], exportMain['value'][0]-exportMain['value'][1],border=True)
+h.metric("Import Price Index", importMain['value'][0], importMain['value'][0]-importMain['value'][1],border=True,format='%.2f')
+i.metric("Export Price Index", exportMain['value'][0], exportMain['value'][0]-exportMain['value'][1],border=True,format='%.2f')
 
 st.sidebar.write("Click to learn more:")
+
+if st.sidebar.button("Total Nonfarm Employment"):
+    st.markdown(
+        """
+        *Total Nonfarm Employment*
+
+        Total Nonfarm Employment counts the number of US workers in the economy, excluding proprietors, private household employees, unpaid volunteers, farm employees, and the unincorporated self-employed.
+
+        According to the Federal Reserve Bank, nonfarm workers account for approximately 80% of the workers who contribute to Gross Domestic Product.
+        """)
+    st.divider()
+    st.caption("**In thousands of employees*")
+
+    monthChange = pd.DataFrame(nonfarm.head(2))
+    yearChanges = pd.DataFrame(nonfarm[nonfarm['periodName']==nonfarm['periodName'][0]])
+
+    a, b = st.columns(2)
+    c, d = st.columns(2)
+
+    a.metric("Current Total Nonfarm Employment",monthChange['value'][0], border=True,format='%,d')
+    b.metric("Last Month",monthChange['value'][1], monthChange['value'][0]-monthChange['value'][1], border=True,format='%,d')
+
+    c.metric("Last Year", yearChanges['value'][12], yearChanges['value'][0]- yearChanges['value'][12], border=True,format='%,d')
+    d.metric("Two Years Ago", yearChanges['value'][24], yearChanges['value'][0]- yearChanges['value'][24], border=True,format='%,d')   
+
+if st.sidebar.button("Average Hourly Earnings"):
+    st.markdown(
+        """
+        *Average Hourly Earnings*
+
+        Average Hourly Earnings is a measure of the average hourly earnings of all private employees on a “gross” basis, including overtime pay.
+
+        Average hourly earnings measure the actual return to a worker for a set period of time, rather than the amount contracted for a unit of work (the wage rate).
+        """)
+    st.divider()
+    st.caption("**Private sector, seasonally adjusted*")
+    
+    st.write('**Average Hourly Earnings Spread by Year(USD)**')
+    wageBox = px.box(avgHourly,y='value',color='year',labels={'value': 'Average Hourly Earnings (USD)',
+                                                              'year': 'Year'})
+    st.plotly_chart(wageBox)
 
 if st.sidebar.button("Unemployment Rate"):
     st.markdown(
@@ -85,48 +126,7 @@ if st.sidebar.button("Unemployment Rate"):
                   x_label='Month',
                   y_label='Unemployment Rate (%)',
                   color='year',
-                  width=800)    
-        
-if st.sidebar.button("Total Nonfarm Employment"):
-    st.markdown(
-        """
-        *Total Nonfarm Employment*
-
-        Total Nonfarm Employment counts the number of US workers in the economy, excluding proprietors, private household employees, unpaid volunteers, farm employees, and the unincorporated self-employed.
-
-        According to the Federal Reserve Bank, nonfarm workers account for approximately 80% of the workers who contribute to Gross Domestic Product.
-        """)
-    st.divider()
-    st.caption("**In thousands of employees*")
-
-    monthChange = pd.DataFrame(nonfarm.head(2))
-    yearChanges = pd.DataFrame(nonfarm[nonfarm['periodName']==nonfarm['periodName'][0]])
-
-    a, b = st.columns(2)
-    c, d = st.columns(2)
-
-    a.metric("Current Total Nonfarm Employment",monthChange['value'][0], border=True)
-    b.metric("Last Month",monthChange['value'][1], monthChange['value'][0]-monthChange['value'][1], border=True)
-
-    c.metric("Last Year", yearChanges['value'][12], yearChanges['value'][0]- yearChanges['value'][12], border=True)
-    d.metric("Two Years Ago", yearChanges['value'][24], yearChanges['value'][0]- yearChanges['value'][24], border=True)
-
-if st.sidebar.button("Average Hourly Earnings"):
-    st.markdown(
-        """
-        *Average Hourly Earnings*
-
-        Average Hourly Earnings is a measure of the average hourly earnings of all private employees on a “gross” basis, including overtime pay.
-
-        Average hourly earnings measure the actual return to a worker for a set period of time, rather than the amount contracted for a unit of work (the wage rate).
-        """)
-    st.divider()
-    st.caption("**Private sector, seasonally adjusted*")
-    
-    st.write('**Average Hourly Earnings Spread by Year(USD)**')
-    wageBox = px.box(avgHourly,y='value',color='year',labels={'value': 'Average Hourly Earnings (USD)',
-                                                              'year': 'Year'})
-    st.plotly_chart(wageBox)
+                  width=800) 
     
 if st.sidebar.button("Import Price Index"):
     st.markdown(
