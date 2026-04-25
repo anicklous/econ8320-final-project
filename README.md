@@ -8,7 +8,7 @@ My first task in creating a Streamlit Dashboard was retrieving datasets to analy
 
 I easily converted the JSON object containing my data to a Python object, but the resulting dictionary was nested in many layers-- unfit for conversion to a usable Pandas DataFrame. Preparing the dictionary for conversion was the most challenging aspect of this task, and it involved many steps. First, I was able to strip some nested layers away by accessing specific keys within the dictionary. Doing this created a new nested dictionary, now with only two layers. From here, I was able to split this dictionary into five smaller dictionaries, each with one nested layer. At this point, I had one nested dictionary for every dataset I initially retrieved. For each of these dictionaries, I accessed the key containing data. Finally no longer nested, these dictionaries were in a proper format to be converted to Pandas DataFrames. From there, I selected which columns (formerly keys) to drop, and downloaded the resulting CSV files.
 
-*Creating a Github Action*
+*Creating a GitHub Action*
 
 This step required me to learn about YML and Cron syntax. Fortunately, my previous forked repositories include multiple workflow actions each, so I could replicate a lot of these steps from those. When I got to installing dependencies, I also learned how the requirements.txt file can be used to contain these elements. This GitHub Action will repeat the retrieving/cleaning/CSV download process at 9:30 AM EST on the third Friday of every month. With fresh data being pushed to this repository monthly, my Streamlit dashboard app should automatically update when the user visits again.
 
