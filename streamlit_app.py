@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 
-st.title(":blue[ECON 8320] Final Project")
+st.title(":green[ECON 8320] Final Project")
 st.write("Updated monthly with the latest data from the Bureau of Labor Statistics")
 st.divider()
 st.write("Current Metrics and Month-to-Month Changes")
@@ -163,7 +163,7 @@ if st.sidebar.button("Export Price Index"):
 
 st.sidebar.button("**Back to main**", type='tertiary')
 st.sidebar.divider()
-st.sidebar.page_link("https://www.bls.gov/developers/api_signature_v2.htm",label=":blue[BLS API format]")
-st.sidebar.page_link("https://data.bls.gov/toppicks?survey=bls",label=":blue[Original data source]")
+st.sidebar.page_link("https://www.bls.gov/developers/api_signature_v2.htm",label=":green[BLS API format]")
+st.sidebar.page_link("https://data.bls.gov/toppicks?survey=bls",label=":green[Original data source]")
 st.sidebar.divider()
 st.sidebar.caption("Last updated: April 2026")
