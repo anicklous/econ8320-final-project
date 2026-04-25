@@ -10,7 +10,7 @@ I easily converted the JSON object containing my data to a Python object, but th
 
 *Creating a Github Action*
 
-Still figuring this out, but the action will eventually repeat the retrieving/cleaning/CSV download process at 9:30 AM EST on the third Friday of every month. The Github Action should download the CSVs to this repository. This ensures the Streamlit Dashboard, which pulls CSV data directly from this repository, is updated monthly.
+This step required me to learn about YML and Cron syntax. Fortunately, my previous forked repositories include multiple workflow actions each, so I could replicate a lot of these steps from those. When I got to installing dependencies, I also learned how the requirements.txt file can be used to contain these elements. This GitHub Action will repeat the retrieving/cleaning/CSV download process at 9:30 AM EST on the third Friday of every month. With fresh data being pushed to this repository monthly, my Streamlit dashboard app should automatically update when the user visits again.
 
 *Creating a Streamlit Dashboard*
 
