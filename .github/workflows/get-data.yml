@@ -1,0 +1,41 @@
+name: Data Retrieval and Cleaning
+
+on:
+  schedule:
+    - cron: "30 9 15-21 * FRI" 
+    
+permissions:
+  contents: write
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert nbformat ipykernel pandas requests numpy
+
+      - name: Execute notebook
+        run: |
+          jupyter nbconvert --to notebook \
+            --execute data_retreival_cleaning.ipynb \
+            --output data_retreival_cleaning_executed.ipynb
+
+      - name: Commit updated CSV files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git add *.csv
+          git commit -m "Automated data update via GitHub Actions" || echo "No changes to commit"
+          git push
