@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import datetime
 
 st.title(":green[ECON 8320] Final Project")
 st.write("Updated monthly with the latest data from the Bureau of Labor Statistics")
@@ -160,9 +161,11 @@ if st.sidebar.button("Export Price Index"):
     exportTable.rename(columns={'year': 'Year', 'periodName': 'Month', 'value': 'Index'}, inplace=True)
     st.write(exportTable)
 
+x = datetime.datetime.now()
+
 st.sidebar.button("**Back to main**", type='tertiary')
 st.sidebar.divider()
 st.sidebar.page_link("https://www.bls.gov/developers/api_signature_v2.htm",label=":green[BLS API format]")
 st.sidebar.page_link("https://data.bls.gov/toppicks?survey=bls",label=":green[Original data source]")
 st.sidebar.divider()
-st.sidebar.caption("Last updated: April 2026")
+st.sidebar.caption(f"Last updated: {x.strftime('%B')} {x.strftime('%Y')}")
