@@ -60,7 +60,7 @@ unempMain = pd.DataFrame(unempRate.head(2))
 
 e.metric("Total Nonfarm Employment",nonfarmMain['value'][0], nonfarmMain['value'][0]-nonfarmMain['value'][1],border=True,format='%,d')
 f.metric("Average Hourly Earnings",hourlyMain['value'][0], hourlyMain['value'][0]-hourlyMain['value'][1],border=True,format='dollar')
-g.metric("Unemployment Rate", unempMain['value'][0], unempMain['value'][0]-unempMain['value'][1],border=True,format='%.2f')
+g.metric("Unemployment Rate", unempMain['value'][0], unempMain['value'][0]-unempMain['value'][1],delta_color="inverse",border=True,format='%.2f')
 
 h.metric("Import Price Index", importMain['value'][0], importMain['value'][0]-importMain['value'][1],border=True,format='%.2f')
 i.metric("Export Price Index", exportMain['value'][0], exportMain['value'][0]-exportMain['value'][1],border=True,format='%.2f')
